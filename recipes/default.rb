@@ -7,19 +7,26 @@
 # MIT Licensed, or any other license you want
 #
 
+include_recipe "build-essential"
+
 package "openssl"
 package "libssl-dev"
 package "libev-dev"
+package "git"
 
 raise "node[:stud][:pemfile] must be a path to a pemfile containing your certificate and private key!" if node[:stud][:pemfile_path].nil?
 
-install_from_release('stud') do
-  release_url   "https://github.com/bumptech/stud/tarball/#{node[:stud][:version]}"
-  release_ext   "tar.gz"
-  prefix_root   node[:stud][:install_prefix_root]
-  user          node[:stud][:user]
-  version       node[:stud][:version]
-  action        [:build_with_make]
+git "#{node[:stud][:install_prefix_root]}/share/stud" do
+  repository "git://github.com/bumptech/stud.git"
+  reference "0.3"
+  action :sync
+end
+
+execute "build-stud" do
+  user node[:stud][:user]
+  cwd "#{node[:stud][:install_prefix_root]}/share/stud"
+  command "make && make install"
+  action :run
 end
 
 # Link the binary to the one we built
