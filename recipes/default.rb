@@ -18,7 +18,7 @@ raise "node[:stud][:pemfile] must be a path to a pemfile containing your certifi
 
 git "#{node[:stud][:install_prefix_root]}/share/stud" do
   repository "git://github.com/bumptech/stud.git"
-  reference "0.3"
+  reference node[:stud][:version]
   action :sync
 end
 
