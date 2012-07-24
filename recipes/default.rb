@@ -12,7 +12,7 @@ include_recipe "build-essential"
 package "openssl"
 package "libssl-dev"
 package "libev-dev"
-package "git"
+package "git-core"
 
 raise "node[:stud][:pemfile] must be a path to a pemfile containing your certificate and private key!" if node[:stud][:pemfile_path].nil?
 
